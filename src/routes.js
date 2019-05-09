@@ -9,6 +9,9 @@ const guestMiddleware = require('./app/middlewares/guest')
 
 const UserController = require('./app/controllers/UserController')
 const SessionControler = require('./app/controllers/SessionController')
+const DashboardController = require('./app/controllers/DashboardController')
+const FileController = require('./app/controllers/FileController')
+const AppointmentController = require('./app/controllers/AppointmentController')
 
 routes.use((req, res, next) => {
   res.locals.flashSucces = req.flash('success')
@@ -17,8 +20,10 @@ routes.use((req, res, next) => {
   return next()
 })
 
+routes.get('/files/:file', FileController.show)
+
 routes.get('/', guestMiddleware, SessionControler.create)
-routes.get('/signin', SessionControler.store)
+routes.post('/signin', SessionControler.store)
 
 routes.get('/signup', guestMiddleware, UserController.create)
 routes.post('/signup', upload.single('avatar'), UserController.store)
@@ -27,9 +32,8 @@ routes.use('/app', authMiddleware)
 
 routes.get('/app/logout', SessionControler.destroy)
 
-routes.get('/app/dashboard', (req, res) => {
-  console.log(req.session.user)
-  return res.render('dashboard')
-})
+routes.get('/app/dashboard', DashboardController.index)
+
+routes.get('/app/appointments/new/:provider', AppointmentController.create)
 
 module.exports = routes

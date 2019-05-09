@@ -22,7 +22,7 @@ class App {
       session({
         name: 'root',
         secret: 'MyAppSecret',
-        resave: false,
+        resave: true,
         store: new LokiStore({
           path: path.resolve(__dirname, '..', 'tmp', 'sessions.db')
         }),
